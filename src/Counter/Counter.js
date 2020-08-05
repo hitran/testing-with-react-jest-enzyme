@@ -13,6 +13,7 @@ class Counter extends React.Component {
     return this.setState({
       ...this.state,
       counter: this.state.counter + 1,
+      isCounterBelowZero: false
     })
   }
 
@@ -26,14 +27,15 @@ class Counter extends React.Component {
     return this.setState({
         ...this.state,
         counter: this.state.counter - 1,
+        isCounterBelowZero: false
     })
   }
 
   render() {
     return (
       <div data-test="component-counter">
-          {this.state.isBelowZero &&
-          <span data-test="errorMsg">Counter cannot go below zero</span>
+          {this.state.isCounterBelowZero &&
+          <span data-test="error-message">Counter cannot go below zero</span>
           }
         <p data-test="counter-display">{this.state.counter}</p>
         <button data-test="increment-button" onClick={this.incrementCounter}>

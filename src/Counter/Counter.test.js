@@ -2,7 +2,9 @@ import React from 'react'
 import Enzyme, { shallow } from 'enzyme'
 import '@testing-library/jest-dom/extend-expect'
 import EnzymeAdapter from 'enzyme-adapter-react-16'
+
 import Counter from './Counter'
+import { findByTestAttr } from '../test/testUtils'
 
 Enzyme.configure({ adapter: new EnzymeAdapter() })
 /**
@@ -16,16 +18,6 @@ const setUp = (props = {}, state = null) => {
   const wrapper = shallow(<Counter {...props} />)
   if (state) wrapper.setState(state)
   return wrapper
-}
-
-/**
- * Find elements with specific data-test values
- * @param {ShallowWrapper} wrapper
- * @param {string} val
- * @returns {ShallowWrapper}
- */
-const findByTestAttr = (wrapper, val) => {
-  return wrapper.find(`[data-test="${val}"]`)
 }
 
 test('app should render correctly', () => {
@@ -58,32 +50,60 @@ test('counter starts 0', () => {
   expect(initialCounterState).toBe(0)
 })
 
-test('click button counter increment at display', () => {
+test('error msg does not display by default', () => {
+  const wrapper = setUp()
+  const errorMsg = findByTestAttr(wrapper, 'error-message')
+  expect(errorMsg.length).toBe(0)
+})
+
+test('increment button', () => {
   const counter = 7
   const wrapper = setUp(null, { counter })
-  const incrementButton = findByTestAttr(wrapper, 'increment-button')
-  incrementButton.simulate('click')
+  const button = findByTestAttr(wrapper, 'increment-button')
+  button.simulate('click')
   const counterDisplay = findByTestAttr(wrapper, 'counter-display')
   expect(counterDisplay.text()).toContain(counter + 1)
 })
 
-test('click button counter decrement at display', () => {
-    const counter = 9
-    const wrapper = setUp(null, { counter })
-    const decrementButton = findByTestAttr(wrapper, 'decrement-button')
-    decrementButton.simulate('click')
-    const counterDisplay = findByTestAttr(wrapper, 'counter-display')
-    expect(counterDisplay.text()).toContain(counter - 1)
+test('decrement button', () => {
+  const counter = 3
+  const wrapper = setUp(null, { counter })
+  const button = findByTestAttr(wrapper, 'decrement-button')
+  button.simulate('click')
+  const counterDisplay = findByTestAttr(wrapper, 'counter-display')
+  expect(counterDisplay.text()).toContain(counter - 1)
 })
 
-test('no count below zero', () => {
+describe('counter at 0, decrement button clicked', () => {
+  let wrapper
+  beforeEach(() => {
     const counter = 0
-    const wrapper = setUp(null, { counter })
+    wrapper = setUp(null, { counter })
     const decrementButton = findByTestAttr(wrapper, 'decrement-button')
     decrementButton.simulate('click')
-    wrapper.update();
+  })
+
+  test ('error message should display when counter below zero', () => {
+    const error = findByTestAttr(wrapper, 'error-message')
+    expect(error.length).toBe(1)
+  })
+
+  test('counter display should not change', () => {
     const counterDisplay = findByTestAttr(wrapper, 'counter-display')
-    const errorMsg = findByTestAttr(wrapper, 'errorMsg')
     expect(counterDisplay.text()).toContain(0)
-    expect(errorMsg.length).toBe(1)
+  })
+
+  test('counter display change if increment button click', () => {
+    const incrementButton = findByTestAttr(wrapper, 'increment-button')
+    incrementButton.simulate('click')
+    const counterDisplay = findByTestAttr(wrapper, 'counter-display')
+    expect(counterDisplay.text()).toContain(1)
+  })
+
+  test('error message should be hidden when increment button click', () => {
+    const incrementButton = findByTestAttr(wrapper, 'increment-button')
+    incrementButton.simulate('click')
+    const errorMsg = findByTestAttr(wrapper, 'error-message')
+    expect(errorMsg.length).toBe(0)
+  })
 })

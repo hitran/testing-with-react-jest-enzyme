@@ -22,8 +22,8 @@ const Congrats = ({success}) => {
     }
 }
 
-export default Congrats
-
 Congrats.propTypes = {
-    success : PropTypes.bool
+    success : PropTypes.bool.isRequired
 }
+
+export default Congrats

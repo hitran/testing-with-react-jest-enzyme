@@ -39,8 +39,30 @@ describe('if there are no words guessed', () => {
     })
 })
 describe('if there are words guessed', () => {
-    test('empty instruction', () => {})
-    test('non-empty guessed words list', () => {})
+    const guessedWords = [
+        { guessedWord: 'train', letterMatchCount: 3},
+        { guessedWord: 'agile', letterMatchCount: 1},
+        { guessedWord: 'party', letterMatchCount: 5}
+    ]
+    let wrapper
+    beforeEach(() => {
+        wrapper = setUp({ guessedWords})
+    })
+
+    test('renders without errors', () => {
+        const componentGuessedWords = findByTestAttr(wrapper, 'component-guessed-words')
+        expect(componentGuessedWords.length).toBe(1)
+    })
+
+    test('non-empty guessed words section', () => {
+        const guessedWordsNode = findByTestAttr(wrapper, 'guessed-words')
+        expect(guessedWordsNode.length).toBe(1)
+    })
+
+    test('display correct number of guessed words', () => {
+        const guessedWordNode = findByTestAttr(wrapper, 'guessed-word')
+        expect(guessedWordNode.length).toBe(guessedWords.length)
+    })
 })
 
 it('does not throw error with expected props', () => {

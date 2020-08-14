@@ -10,7 +10,7 @@ const Congrats = ({success}) => {
     if (success) {
         return (
             <div data-test="component-congrats">
-                <div data-test="congrats-message">
+                <div data-test="congrats-message" className="alert alert-success">
                     Congratulations! You guessed the word!
                 </div>
             </div>

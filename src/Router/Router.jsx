@@ -9,7 +9,7 @@ function Router() {
             <Route path="/" exact>
                 <Counter />
             </Route>
-            <Route path="/jotto-app">
+            <Route path="/jotto">
                 <Jotto />
             </Route>
         </Switch>

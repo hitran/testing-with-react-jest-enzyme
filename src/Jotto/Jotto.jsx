@@ -1,19 +1,21 @@
 import React from 'react'
+
 import Congrats from './Congrats/Congrats'
+import GuessedWords from './GuessedWords/GuessedWords'
 
 class Jotto extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            success: false
-        }
-    }
     
     render() {
         return (
-            <div data-test="component-jotto">
-                <div>This is Jotto App</div>
-                <Congrats success ={this.state.success}/>
+            <div className="container" data-test="component-jotto">
+                <h1>This is Jotto App</h1>
+                <Congrats success = { true }/>
+                <GuessedWords guessedWords={[
+                    { 
+                        guessedWord: 'train',
+                        letterMatchCount: 3
+                    }
+                ]}/>
             </div>
         )
     }

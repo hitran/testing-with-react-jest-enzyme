@@ -12,8 +12,13 @@ describe('getLetterMatchCount', () => {
         expect(letterMatchCount).toBe(3)
     })
 
-    test('returns correct number when there are duplicate letters in guessed word', () => {
+    test('returns correct count when there are duplicate letters in guessed word', () => {
         const letterMatchCount = getLetterMatchCount('parka', secretWord)
+        expect(letterMatchCount).toBe(3)
+    })
+
+    test('returns correct count without case sensitive', () => {
+        const letterMatchCount = getLetterMatchCount('TrAin', secretWord)
         expect(letterMatchCount).toBe(3)
     })
 })
